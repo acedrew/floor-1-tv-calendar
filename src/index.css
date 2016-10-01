@@ -116,7 +116,15 @@ body {
   color: #fff;
   font-size: 34px;
   font-weight: 100;
-  margin: 0 0 5px;
+  margin: 0 0 0px;
+  letter-spacing: 1px;
+}
+
+.event-location {
+  color: #bbb;
+  font-size: 24px;
+  font-weight: 100;
+  margin: 0 0 5px 0px;
   letter-spacing: 1px;
 }
 

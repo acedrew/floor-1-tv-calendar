@@ -107,7 +107,7 @@ class App extends Component {
                 {floor.name}
               </h2>
               {floor.spaces.map(space =>
-              <GetEvents key={space.url} SpacesCalURL={space.url}/>
+              <GetEvents key={space.url} SpacesCalURL={space.url} SpaceName={space.name}/>
             )}
             </div>
           </div>

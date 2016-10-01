@@ -73,6 +73,7 @@ export default class GetEvents extends React.Component {
           {this.state.events.map(event =>
             <div key={event.id} className={event.class}>
               <p className="event-title">{event.summary}</p>
+              <p className="event-location">{this.props.SpaceName}</p>
               <p className="event-time">{event.start.time} - {event.end.time}</p>
             </div>
           )}
