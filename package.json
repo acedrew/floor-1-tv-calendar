@@ -1,8 +1,8 @@
 {
-  "name": "floor-5-tv-calendar",
+  "name": "floor-1-tv-calendar",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://brettwise.github.io/floor-5-tv-calendar",
+  "homepage": "http://acedrew.github.io/floor-1-tv-calendar",
   "devDependencies": {
     "axios": "^0.14.0",
     "react-scripts": "0.4.3"
