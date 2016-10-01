@@ -1,0 +1,146 @@
+/*Any element wrapped in .grid will grow to equal width in row*/
+.grid {
+  display: flex;
+}
+
+.grid > * {
+  flex: 1;
+  flex-grow: 4;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.grid > *:first-child {
+  margin-left: -1rem;
+}
+
+.grid > *:last-child {
+  margin-right: -1rem;
+}
+
+.set-height {
+  height: 20vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.header,
+.event-space {
+  color: #00a9e0;
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.orange {
+  color: rgb(237, 130, 47);
+}
+
+.event-time {
+  color: rgba(237, 130, 47, 0.9);
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 8.33px;
+  margin-bottom: 5px;
+}
+
+.title-and-time {
+  border-bottom: 1px solid rgb(76, 76, 76);
+  padding-bottom: 1rem;
+}
+
+.time,
+.currently {
+  font-family: 'Raleway', sans-serif;
+  font-size: 33px;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: #252524;
+  margin: 0;
+  padding: 0;
+}
+
+.center {
+  text-align: center;
+}
+
+.la {
+  text-align: left;
+}
+
+.ra {
+  text-align: right;
+}
+
+.neg-right-margin {
+  margin-right: -55px;
+}
+
+.side-padding {
+  padding: 0 107px;
+}
+
+.left-arrow {
+  display: inline-block;
+  font-size: 40px;
+  font-weight: 400;
+  margin-right: 17px;
+  margin-left: -60px;
+  /*transform: scale(-1, 1);
+  */
+}
+
+.event-space {
+  font-size: 40px;
+  font-weight: 100;
+  letter-spacing: 4px;
+  margin-bottom: 12px;
+}
+
+.event-title {
+  color: #fff;
+  font-size: 34px;
+  font-weight: 100;
+  margin: 0 0 5px;
+  letter-spacing: 1px;
+}
+
+.past .event-title {
+  color: #bbb;
+  font-size: 34px;
+  font-weight: 100;
+  margin: 0 0 5px;
+  letter-spacing: 1px;
+}
+
+.event-time {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  margin-top: 0;
+}
+
+.currently {
+  font-style: italic;
+  font-weight: 100;
+}
+
+.time {
+  font-weight: 900; /* Black Weight */
+  margin-left: 1rem;
+}
