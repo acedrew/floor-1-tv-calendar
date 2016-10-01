@@ -83,7 +83,7 @@ const floors = [
     space.url = makeGoogleCalendarURL(space.url);
     return space;
   });
-  if (floor.name == "Floor 1") {
+  if (floor.name === "Floor 1") {
     floor.ligature = "➤"
   } else {
     floor.ligature = "⮝"
