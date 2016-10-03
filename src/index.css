@@ -19,7 +19,7 @@
 }
 
 .set-height {
-  height: 20vh;
+  min-height: 20vh;
 }
 
 h1,
