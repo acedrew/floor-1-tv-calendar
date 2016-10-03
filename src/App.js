@@ -79,10 +79,12 @@ const floors = [
     ]
   }
 ].map(function(floor) {
-  floor.spaces = floor.spaces.map(function(space) {
-    space.url = makeGoogleCalendarURL(space.url);
-    return space;
+  floor.events = [];
+  floor.spaces.map(space => {
+    floor.events = floor.events.concat(GetEvents(makeGoogleCalendarURL(space.url)));
+      console.log(floor.events);
   });
+  console.log(floor.events);
   if (floor.name === "Floor 1") {
     floor.ligature = "➤"
   } else {
@@ -91,6 +93,8 @@ const floors = [
   return floor;
 });
 console.log(floors);
+
+
 class App extends Component {
   render() {
     return (
@@ -106,9 +110,13 @@ class App extends Component {
                 </div>
                 {floor.name}
               </h2>
-              {floor.spaces.map(space =>
-              <GetEvents key={space.url} SpacesCalURL={space.url} SpaceName={space.name}/>
-            )}
+              {this.state.events.map(event =>
+                <div key={event.id} className={event.class}>
+                  <p className="event-title">{event.summary}</p>
+                  <p className="event-location">{this.props.SpaceName}</p>
+                  <p className="event-time">{event.start.time} - {event.end.time}</p>
+                </div>
+              )}
             </div>
           </div>
           )}

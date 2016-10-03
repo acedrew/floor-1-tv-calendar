@@ -1,17 +1,6 @@
-import React from 'react';
 import axios from 'axios';
 
-export default class GetEvents extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      events: []
-    };
-  }
-
-
-  getEvents(url) {
+export default function getEvents(url) {
     axios.get(url)
       .then(res => {
         const events = res.data.items.map(function(event) {
@@ -52,32 +41,6 @@ export default class GetEvents extends React.Component {
           }
           return event;
         });
-        this.setState({ events });
+        return events;
       });
-    }
-  queryEvents() {
-    console.log(this.props.SpacesCalUrl);
-    this.getEvents(this.props.SpacesCalURL);
-  }
-
-  componentDidMount() {
-    this.queryEvents();
-    window.setInterval(function () {
-      this.queryEvents();
-    }.bind(this), 5 * 60 * 1000);
-  }
-
-  render() {
-      return (
-        <div>
-          {this.state.events.map(event =>
-            <div key={event.id} className={event.class}>
-              <p className="event-title">{event.summary}</p>
-              <p className="event-location">{this.props.SpaceName}</p>
-              <p className="event-time">{event.start.time} - {event.end.time}</p>
-            </div>
-          )}
-          </div>
-      )
-    }
   }
