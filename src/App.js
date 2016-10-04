@@ -80,30 +80,35 @@ const config = [
   }
 ];
 
-function updateEventState(state, events, floor) {
-  state.events[floor] = events;
-  return state;
-}
-
 class App extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      floors: []
+      floors: config.map(floor =>{
+        return {name: floor.name, events: []}
+      })
     };
   }
+  updateEvents(events, floorname){
+    let floorUpdate = this.state.floors.map(floor => {
+      if(floorname === floor.name) {
+        floor.events = floor.events.concat(events);
+      }
+      return floor;
+    });
+    this.setState({floors: floorUpdate});
+    this.forceUpdate();
+  }
+
+
   componentWillMount() {
     var self = this;
-    config.forEach((floor, index) => {
-      self.setState({floors: self.state.floors.concat([{events: [], name: floor.name}])});
+    config.forEach(floor => {
       floor.spaces.forEach(space => {
         GetEvents(makeGoogleCalendarURL(space.url)).then(function(events) {
-          let floorUpdate = self.state.floors;
-          console.log(self.state.floors);
-          floorUpdate[index]["events"] = self.state.floors[index].events.concat(events);
-          self.setState({floors: floorUpdate});
+          self.updateEvents(events, floor.name);
         });
       });
 
@@ -120,7 +125,7 @@ class App extends Component {
       <div>
         <TitleAndTime/>
         <div className="side-padding">
-          {this.state.floors.map(floor =>
+          {this.state.floors.map((floor, index) =>
             <div key={floor.name} className="grid set-height">
             <div className="la">
               <h2 className="event-space">
@@ -129,13 +134,13 @@ class App extends Component {
                 </div>
                 {floor}
               </h2>
-              {floor.events.map(event => {
+              {this.state.floors[index].events.map(event =>
                 <div key={event.id} className={event.class}>
                   <p className="event-title">{event.summary}</p>
-                  <p className="event-location">{this.props.SpaceName}</p>
+                  <p className="event-location">{event.class}</p>
                   <p className="event-time">{event.start.time} - {event.end.time}</p>
                 </div>
-              })
+              )
             }
             </div>
           </div>
