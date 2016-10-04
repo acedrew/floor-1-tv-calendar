@@ -105,6 +105,20 @@ body {
   */
 }
 
+.up-arrow {
+  display: inline-block;
+  font-size: 40px;
+  font-weight: 400;
+  margin-right: 17px;
+  margin-left: -60px;
+  transform: rotate(-90deg);
+}
+
+.event-space {
+  font-size: 40px;
+  font-weight: 100;
+}
+
 .event-space {
   font-size: 40px;
   font-weight: 100;

@@ -94,12 +94,31 @@ class App extends Component {
   updateEvents(events, floorname){
     let floorUpdate = this.state.floors.map(floor => {
       if(floorname === floor.name) {
-        floor.events = floor.events.concat(events);
+        if(floor.name === "Floor 1"){
+          floor.arrowClass = "left-arrow";
+        } else {
+          floor.arrowClass = "up-arrow";
+        }
+        floor.events = floor.events.concat(events).sort((event1, event2) => {
+          if(event1.startTime.getTime() > event2.startTime.getTime()) {
+            return 1;
+          } else if (event1.startTime.getTime() === event2.startTime.getTime()){
+            return 0;
+          } else {
+            return -1;
+          }
+        }).filter(event => {
+          if(event.hasOwnProperty("visibility") && event.visibility === "private") {
+            return null;
+          } else {
+            return event;
+          }
+        });
       }
       return floor;
     });
+    console.log(floorUpdate);
     this.setState({floors: floorUpdate});
-    this.forceUpdate();
   }
 
 
@@ -111,12 +130,6 @@ class App extends Component {
           self.updateEvents(events, floor.name);
         });
       });
-
-      //if (floor.name === "Floor 1") {
-        //this.state.floors[floor.name]["arrow"] = "➤"
-      //} else {
-        //this.state.floors[floor.name]["arrow"] = "⮝"
-      //}
     });
   }
 
@@ -129,10 +142,10 @@ class App extends Component {
             <div key={floor.name} className="grid set-height">
             <div className="la">
               <h2 className="event-space">
-                <div className="left-arrow">
-                {floor.ligature}
+                <div className={floor.arrowClass}>
+                ➤
                 </div>
-                {floor}
+                {floor.name}
               </h2>
               {this.state.floors[index].events.map(event =>
                 <div key={event.id} className={event.class}>

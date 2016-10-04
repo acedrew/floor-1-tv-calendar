@@ -7,8 +7,8 @@ export default function getEvents(url) {
       .then(res => {
         const events = res.data.items.map(function(event) {
           let AMPM, endHours, startHours, endAMPM, startAMPM;
-          let startTime = new Date(event.start.dateTime);
-          let endTime = new Date(event.end.dateTime);
+          event.startTime = new Date(event.start.dateTime);
+          event.endTime = new Date(event.end.dateTime);
           let time = new Date();
 
           function pad(n) {
@@ -25,18 +25,18 @@ export default function getEvents(url) {
             hours = hours === 12 ? 12 : hours % 12
             return [hours, AMPM];
           }
-          [startHours, startAMPM] = twentyfourtotwelve(startTime.getHours());
-          [endHours, endAMPM] = twentyfourtotwelve(endTime.getHours());
+          [startHours, startAMPM] = twentyfourtotwelve(event.startTime.getHours());
+          [endHours, endAMPM] = twentyfourtotwelve(event.endTime.getHours());
 
           if(startAMPM === endAMPM) {
-            event.start.time = `${startHours}:${pad(startTime.getMinutes())}`;
-            event.end.time = `${endHours}:${pad(endTime.getMinutes())} ${endAMPM}`;
+            event.start.time = `${startHours}:${pad(event.startTime.getMinutes())}`;
+            event.end.time = `${endHours}:${pad(event.endTime.getMinutes())} ${endAMPM}`;
           } else {
-            event.start.time = `${startHours}:${pad(startTime.getMinutes())} ${startAMPM}`;
-            event.end.time = `${endHours}:${pad(endTime.getMinutes())} ${endAMPM}`;
+            event.start.time = `${startHours}:${pad(event.startTime.getMinutes())} ${startAMPM}`;
+            event.end.time = `${endHours}:${pad(event.endTime.getMinutes())} ${endAMPM}`;
           }
 
-          if (endTime.getTime() < time.getTime()) {
+          if (event.endTime.getTime() < time.getTime()) {
             event.class = "past";
           } else {
             event.class = "current";
