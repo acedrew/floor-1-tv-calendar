@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 export default function getEvents(url) {
-    axios.get(url)
+  let promise = new Promise( function(resolve){
+
+  axios.get(url)
       .then(res => {
         const events = res.data.items.map(function(event) {
           let AMPM, endHours, startHours, endAMPM, startAMPM;
@@ -41,6 +43,9 @@ export default function getEvents(url) {
           }
           return event;
         });
-        return events;
+        resolve(events);
       });
+
+  });
+  return promise;
   }

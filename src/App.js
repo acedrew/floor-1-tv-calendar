@@ -25,7 +25,7 @@ function makeGoogleCalendarURL(calID) {
   return `https://www.googleapis.com/calendar/v3/calendars/${calID}/events?singleEvents=true&orderBy=startTime&timeMin=${getBOD()}&timeMax=${getEOD()}&key=AIzaSyDFzoxhmCRgYGWBzxhjClogyoh0ibNlhPs`
 }
 
-const floors = [
+const config = [
   {
     name: "Rooftop",
     spaces: [
@@ -78,48 +78,68 @@ const floors = [
       }
     ]
   }
-].map(function(floor) {
-  floor.events = [];
-  floor.spaces.map(space => {
-    floor.events = floor.events.concat(GetEvents(makeGoogleCalendarURL(space.url)));
-      console.log(floor.events);
-  });
-  console.log(floor.events);
-  if (floor.name === "Floor 1") {
-    floor.ligature = "➤"
-  } else {
-    floor.ligature = "⮝"
-  }
-  return floor;
-});
-console.log(floors);
+];
 
+function updateEventState(state, events, floor) {
+  state.events[floor] = events;
+  return state;
+}
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      floors: []
+    };
+  }
+  componentWillMount() {
+    var self = this;
+    config.forEach((floor, index) => {
+      self.setState({floors: self.state.floors.concat([{events: [], name: floor.name}])});
+      floor.spaces.forEach(space => {
+        GetEvents(makeGoogleCalendarURL(space.url)).then(function(events) {
+          let floorUpdate = self.state.floors;
+          console.log(self.state.floors);
+          floorUpdate[index]["events"] = self.state.floors[index].events.concat(events);
+          self.setState({floors: floorUpdate});
+        });
+      });
+
+      //if (floor.name === "Floor 1") {
+        //this.state.floors[floor.name]["arrow"] = "➤"
+      //} else {
+        //this.state.floors[floor.name]["arrow"] = "⮝"
+      //}
+    });
+  }
+
   render() {
     return (
       <div>
         <TitleAndTime/>
         <div className="side-padding">
-          {floors.map(floor =>
+          {this.state.floors.map(floor =>
             <div key={floor.name} className="grid set-height">
             <div className="la">
               <h2 className="event-space">
                 <div className="left-arrow">
                 {floor.ligature}
                 </div>
-                {floor.name}
+                {floor}
               </h2>
-              {this.state.events.map(event =>
+              {floor.events.map(event => {
                 <div key={event.id} className={event.class}>
                   <p className="event-title">{event.summary}</p>
                   <p className="event-location">{this.props.SpaceName}</p>
                   <p className="event-time">{event.start.time} - {event.end.time}</p>
                 </div>
-              )}
+              })
+            }
             </div>
           </div>
-          )}
+      )}
         </div>
       </div>
     );
