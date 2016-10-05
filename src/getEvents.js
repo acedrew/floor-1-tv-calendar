@@ -1,11 +1,12 @@
 import axios from 'axios';
 
-export default function getEvents(url) {
+export default function getEvents(url, spaceName) {
   let promise = new Promise( function(resolve){
 
   axios.get(url)
       .then(res => {
         const events = res.data.items.map(function(event) {
+          event.spaceName = spaceName;
           let AMPM, endHours, startHours, endAMPM, startAMPM;
           event.startTime = new Date(event.start.dateTime);
           event.endTime = new Date(event.end.dateTime);

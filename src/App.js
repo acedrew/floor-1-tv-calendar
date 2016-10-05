@@ -85,15 +85,18 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
+    this.state = this.buildEmptyState();
+  }
+  buildEmptyState() {
+    return {
       floors: config.map(floor =>{
         return {name: floor.name, events: []}
       })
     };
   }
-  updateEvents(events, floorname){
+  updateEvents(events, floorName){
     let floorUpdate = this.state.floors.map(floor => {
-      if(floorname === floor.name) {
+      if(floorName === floor.name) {
         if(floor.name === "Floor 1"){
           floor.arrowClass = "left-arrow";
         } else {
@@ -109,36 +112,50 @@ class App extends Component {
           }
         }).filter(event => {
           if(event.hasOwnProperty("visibility") && event.visibility === "private") {
-            return null;
+            return false;
           } else {
-            return event;
+            return true;
           }
         });
       }
       return floor;
     });
-    console.log(floorUpdate);
     this.setState({floors: floorUpdate});
   }
 
-
-  componentWillMount() {
+  refreshData() {
+    this.setState(this.buildEmptyState);
     var self = this;
     config.forEach(floor => {
       floor.spaces.forEach(space => {
-        GetEvents(makeGoogleCalendarURL(space.url)).then(function(events) {
+        GetEvents(makeGoogleCalendarURL(space.url), space.name).then(function(events) {
           self.updateEvents(events, floor.name);
         });
       });
     });
+
   }
 
-  render() {
+  componentWillMount() {
+    console.log("willmount");
+    this.refreshData();
+    window.setInterval(function() {
+      console.log("scheduled");
+      this.refreshData();
+    }.bind(this), 60*1000);
+  }
+  renderEvent(event) {
     return (
-      <div>
-        <TitleAndTime/>
-        <div className="side-padding">
-          {this.state.floors.map((floor, index) =>
+      <div key={event.id} className={event.class}>
+        <p className="event-title">{event.summary}</p>
+        <p className="event-location">{event.spaceName}</p>
+        <p className="event-time">{event.start.time} - {event.end.time}</p>
+      </div>
+    )
+  }
+  renderFloor(floor) {
+      if(floor.events.length > 0) {
+        return (
             <div key={floor.name} className="grid set-height">
             <div className="la">
               <h2 className="event-space">
@@ -147,17 +164,26 @@ class App extends Component {
                 </div>
                 {floor.name}
               </h2>
-              {this.state.floors[index].events.map(event =>
-                <div key={event.id} className={event.class}>
-                  <p className="event-title">{event.summary}</p>
-                  <p className="event-location">{event.class}</p>
-                  <p className="event-time">{event.start.time} - {event.end.time}</p>
-                </div>
+              {floor.events.map(event =>
+                this.renderEvent(event)
               )
             }
             </div>
           </div>
-      )}
+        )
+      }
+
+  }
+
+  render() {
+
+    return (
+      <div>
+        <TitleAndTime/>
+        <div className="side-padding">
+          {this.state.floors.map((floor, index) =>
+            this.renderFloor(floor)
+          )}
         </div>
       </div>
     );
